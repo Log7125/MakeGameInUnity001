@@ -1,2 +1,8 @@
 # MakeGameInUnity001
-Plz
+
+Start Menu
+
+   cd my-game
+   npm run dev -- --host
+
+   
