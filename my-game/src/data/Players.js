@@ -26,7 +26,7 @@ export const Players ={
 //Tag setup
 export const Tag = {
     key : 'Q',
-    cooldown: 3,
+    cooldown: 1000, // 1000 -> 1s
 }
 
 export const ENEMY_DATA = {
