@@ -2,5 +2,5 @@
 
 export const BackGround = {
     key : 'bg', //name
-    path : 'assets/bg.png',
+    path : './public/bg.png',
 };

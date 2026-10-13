@@ -9,6 +9,14 @@ export const Players ={
     maxHp: 100,
     speed: 160,
     jumpPower: 300,
+    
+    attack: {
+        cooldown: 250,      //발사 간격
+        bulletSpeed: 500,
+        bulletLife: 800,    //사라지는 시간
+        bulletSize: 8,
+    },
+
     },
     B:{
     name : 'CMYK',
@@ -19,7 +27,14 @@ export const Players ={
     maxHp: 180,
     speed: 150,
     jumpPower: 320,
-    }
+
+    attack: {
+        cooldown: 400,      
+        range: 40,      //공격 반지름
+        duration: 150, //이펙트 지속시간
+    },
+
+    },
 
 };
 
