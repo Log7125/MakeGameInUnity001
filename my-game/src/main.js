@@ -66,7 +66,7 @@ class GameScene extends Phaser.Scene {
 
     this.facing = 1;          //1 = right, -1 = left
     this.lastAttackTime = 0;
-    this.attackKey = this.input.keyboard.addKey('J');
+    this.input.mouse.disableContextMenu(); //우클 메뉴 방지
 
     //add keyboard
     this.keys = this.input.keyboard.addKeys({
@@ -81,6 +81,13 @@ class GameScene extends Phaser.Scene {
   update(time) {
     const body = this.current.body;
     const speed = this.current.charData.speed;
+    const pointer = this.input.activePointer; //Mouse
+
+    this.facing = pointer.worldX < this.current.x ? -1 : 1;
+
+    if(pointer.leftButtonDown()){ //ing
+      this.attack(time);
+    }
 
     if(this.keys.left.isDown) {
       body.setVelocityX(-speed);
@@ -94,9 +101,6 @@ class GameScene extends Phaser.Scene {
       body.setVelocityY(-this.current.charData.jumpPower);
     }
 
-    if(this.attackKey.isDown){
-      this.attack(time);
-    }
     if(Phaser.Input.Keyboard.JustDown(this.tagKey)){
       this.switchTag(time);
     }
@@ -123,25 +127,36 @@ class GameScene extends Phaser.Scene {
     if(time - this.lastAttackTime < atk.cooldown) return; //cooldown
     this.lastAttackTime = time;
 
+    // char -> mouse angle
+    const pointer = this.input.activePointer;
+    const angle = Phaser.Math.Angle.Between(
+      this.current.x, this.current.y,
+      pointer.worldX, pointer.woldY
+    );
+
     if(this.current.charData.type ==='ranged'){
       this.shootBullet(atk);
     } else{
       this.slash(atk);
     }
   };
-  shootBullet(atk){
+
+  shootBullet(atk, angle){
     const bullet = this.add.rectangle(
       this.current.x, this.current.y,
       atk.bulletSize, atk.bulletSize, 0xffff66
     );
     this.physics.add.existing(bullet);
     bullet.body.setAllowGravity(false);
-    bullet.body.setVelocityX(atk.bulletSpeed * this.facing);
+    bullet.body.setVelocity(
+      Math.cos(angle) * atk.bulletSpeed,
+      Math.sin(angle) * atk.bulletSpeed
+    );
 
     this.time.delayedCall(atk.bulletLift, () => bullet.destroy());
   };
 
-  slash(atk) {
+  slash(atk,angle) {
   // 반달: 부채꼴을 그려서 잠깐 보여주고 지움
   const g = this.add.graphics();
   g.fillStyle(0xffffff, 0.8);
@@ -150,7 +165,7 @@ class GameScene extends Phaser.Scene {
 
   g.x = this.current.x;
   g.y = this.current.y;
-  g.scaleX = this.facing;          // 왼쪽을 보면 좌우 반전
+  g.rotation = angle;
 
   // 살짝 커지면서 사라지는 연출
   this.tweens.add({
@@ -161,6 +176,7 @@ class GameScene extends Phaser.Scene {
     onComplete: () => g.destroy(),
   });
 }
+
 }
 
 
