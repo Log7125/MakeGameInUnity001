@@ -95,7 +95,7 @@ class GameScene extends Phaser.Scene {
     }
 
     if(this.attackKey.isDown){
-      this.attackKey(time);
+      this.attack(time);
     }
     if(Phaser.Input.Keyboard.JustDown(this.tagKey)){
       this.switchTag(time);
@@ -118,14 +118,6 @@ class GameScene extends Phaser.Scene {
     this.current = next;
 
   }
-}
-
-new Phaser.Game({
-  type: Phaser.AUTO,
-  width: 480,
-  height: 270,
-  pixelArt: true,                             //확대해도 도트 그대로
-
   attack(time){
     const atk = this.current.charData.attack;
     if(time - this.lastAttackTime < atk.cooldown) return; //cooldown
@@ -136,7 +128,7 @@ new Phaser.Game({
     } else{
       this.slash(atk);
     }
-  },
+  };
   shootBullet(atk){
     const bullet = this.add.rectangle(
       this.current.x, this.current.y,
@@ -147,7 +139,7 @@ new Phaser.Game({
     bullet.body.setVelocityX(atk.bulletSpeed * this.facing);
 
     this.time.delayedCall(atk.bulletLift, () => bullet.destroy());
-  },
+  };
 
   slash(atk) {
   // 반달: 부채꼴을 그려서 잠깐 보여주고 지움
@@ -168,7 +160,16 @@ new Phaser.Game({
     duration: atk.duration,
     onComplete: () => g.destroy(),
   });
-},
+}
+}
+
+
+new Phaser.Game({
+  type: Phaser.AUTO,
+  width: 480,
+  height: 270,
+  pixelArt: true,                             //확대해도 도트 그대로
+
   scale: {
     mode: Phaser.Scale.FIT,                   //비율 유지하면서 창에 맞추기
     autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -177,6 +178,5 @@ new Phaser.Game({
     default: 'arcade',
     arcade: {gravity: {y: 800 }, debug: true},
   },
-
   scene: GameScene,
 });
