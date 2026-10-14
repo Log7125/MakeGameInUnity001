@@ -131,13 +131,13 @@ class GameScene extends Phaser.Scene {
     const pointer = this.input.activePointer;
     const angle = Phaser.Math.Angle.Between(
       this.current.x, this.current.y,
-      pointer.worldX, pointer.woldY
+      pointer.worldX, pointer.worldY
     );
 
     if(this.current.charData.type ==='ranged'){
-      this.shootBullet(atk);
+      this.shootBullet(atk,angle);
     } else{
-      this.slash(atk);
+      this.slash(atk,angle);
     }
   };
 
@@ -153,7 +153,7 @@ class GameScene extends Phaser.Scene {
       Math.sin(angle) * atk.bulletSpeed
     );
 
-    this.time.delayedCall(atk.bulletLift, () => bullet.destroy());
+    this.time.delayedCall(atk.bulletLife, () => bullet.destroy());
   };
 
   slash(atk,angle) {
