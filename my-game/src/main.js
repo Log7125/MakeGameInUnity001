@@ -27,6 +27,8 @@ class GameScene extends Phaser.Scene {
 
     //UI
     this.gaugeBar = this.add.graphics().setDepth(100);
+    this.gaugeText = this.add.text(10,20, '', {
+      fontSize : '10px', color: '#ffffff',}).setDepth(100);
     
     this.players = {};
     for(const id in Players){
@@ -108,11 +110,26 @@ class GameScene extends Phaser.Scene {
   drawGauge(buffed){
     const g = this.gaugeBar;
     g.clear();
+
+    //배경
     g.fillStyle(0x000000, 0.6);
-    g.fillRect(10,10,100,8);          //background
+    g.fillRect(10,10,100,8);          
+
+    //게이지
     const ratio = this.tagGauge / Tag.gaugeMax;
-    g.fillStyle(buffed ? 0xffdd33 : (ratio >= 1 ? 0x66ff66 : 0x66aaff), 1);
+    const color = buffed ? 0xffdd33 : (ratio >= 1 ? 0x66ff66 : 0x66aaff);
+    g.fillStyle(color, 1);
     g.fillRect(10,10,100 * ratio, 9);
+
+    //문구
+    let lable = 'Tag ${Math.floor(this.tagGauge)}/${Tag.gaugeMax}';
+    if(buffed){
+      const left = ((this.buffUntil - this.time.now) / 1000).toFixed(1);
+      lable = 'BUFF ${left}s';
+    } else if(ratio >= 1){
+      lable = 'Tag SKILL READY';
+    }
+    this.gaugeText.setText(lable);
 
   }
   switchTag(time){
