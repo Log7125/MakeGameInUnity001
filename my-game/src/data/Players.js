@@ -40,8 +40,19 @@ export const Players ={
 
 //Tag setup
 export const Tag = {
-    key : 'Q',
-    cooldown: 1000, // 1000 -> 1s
+    button : 'right',
+    cooldown: 2000, // 1000 -> 1s
+
+    gaugeMax: 100,
+    regenPerSec: 4,     // 가만히 있을 때
+    gainOnAttack: 5,    // 공격할 때
+
+    skill: {
+        duration: 5000, //during buff
+        speedMul: 1.7,  // 이속 배율
+        attackMul: 1.7, // 공속 배율
+
+    },
 }
 
 export const ENEMY_DATA = {
